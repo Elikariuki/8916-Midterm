@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, jsonify, request, abort
 from flask_sqlalchemy import SQLAlchemy
 from flask_restful import Resource, Api
 
@@ -19,9 +19,8 @@ class Student(db.Model):
     def to_dict(self):
         return {"id": self.id, "name": self.name, "grade": self.grade, "email": self.email}
 
-# Create database
-@app.before_first_request
-def create_tables():
+# Create tables within app context
+with app.app_context():
     db.create_all()
 
 # CRUD operations for Student
